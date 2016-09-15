@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://xmlns.jcp.org/jsf/html ">
+<h:head>
+   <title>Contactos</title>
+</h:head>
+<h:body>
+   <h:form id="infobox">
+      First Name: <br/>
+      <h:inputText id="name"  value="#{user.name}" required="true"/>
+      <h:message style="color: red;" for="name"/>
+      <br/><br/>
+      Last Name: <br/>
+      <h:inputText id="lastName"  value="#{user.lastName}" required="true"/>
+      <h:message style="color: red;" for="lastName"/>
+      <br/><br/>
+      Telephone: <br/>
+      <h:inputText id="phone"  value="#{user.phone}" required="true"/>
+      <h:message style="color: red;" for="phone"/>
+      <br/><br/>
+      Address: <br/>
+      <h:inputText id="address"  value="#{user.address}"/>
+      <br/><br/>
+      Email: <br/>
+      <h:inputText id="email"  value="#{user.email}"/>
+      <br/><br/>
+      <h:commandButton  action="#{user.addUser}" value="Add"/>
+   </h:form>
+   <h:form id="form">
+
+      <p:dataTable id="singleDT" var="person" value="#{user.users}" selectionMode="single"
+                   selection="#{user.selecteduser}"
+                   rowKey="#{person.name}-#{person.lastName}-#{person.phone}">
+         <f:facet name="header">My Contacts</f:facet>
+
+         <p:column headerText="Nombre">
+            <h:outputText value="#{person.name}"/>
+         </p:column>
+
+         <p:column headerText="Apellido">
+            <h:outputText value="#{person.lastName}"/>
+         </p:column>
+
+         <p:column headerText="Telefono">
+            <h:outputText value="#{person.phone}"/>
+         </p:column>
+
+         <p:column headerText="Email">
+            <h:outputText value="#{person.email}"/>
+         </p:column>
+
+         <p:column headerText="Direccion">
+            <h:outputText value="#{person.address}"/>
+         </p:column>
+
+         <p:column headerText="Botones">
+            <h:commandButton
+                             action="#{user.deleteUser(person.name, person.lastName, person.phone)}"
+                             value="Delete"/>
+         </p:column>
+
+         <f:facet name="footer">
+            <p:commandButton process="singleDT" update=":form:editInfo" value="Edit"
+                             oncomplete="PF('editDialog').show()"/>
+         </f:facet>
+      </p:dataTable>
+
+
+      <p:dialog  header="Edit Contact" widgetVar="editDialog" showEffect="fade" hideEffect="fade"
+                resizable="false" draggable="false">
+         <p:outputPanel id="editInfo">
+
+
+            Editar Nombre: <br/>
+            <h:inputText value="#{user.selecteduser.name}"/>
+            <br/><br/>
+            Editar Apellido: <br/>
+            <h:inputText  value="#{user.selecteduser.lastName}"/>
+            <br/><br/>
+            Editar Telefono: <br/>
+            <h:inputText value="#{user.selecteduser.phone}"/>
+            <br/><br/>
+            Editar Direccion: <br/>
+            <h:inputText value="#{user.selecteduser.address}"/>
+            <br/><br/>
+            Editar Email: <br/>
+            <h:inputText value="#{user.selecteduser.email}"/>
+            <br/><br/>
+            <h:commandButton action="#{user.editUser(user.name, user.lastName, user.phone)}"  value="Edit"/>
+         </p:outputPanel>
+      </p:dialog>
+   </h:form>
+</h:body>
+</html>
